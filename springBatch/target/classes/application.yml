@@ -1,0 +1,39 @@
+spring:
+  profiles:
+    active: local
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:springBatch
+    username: sa
+    password:
+
+
+---
+spring:
+  config:
+    activate:
+      on-profile: mysql
+  datasource:
+    url: jdbc:mysql://test.cqtkqq2p1cfx.ap-northeast-2.rds.amazonaws.com/batch
+    username: root
+    password: malangcute121!
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  batch:
+    job:
+      names: ${job.name:NONE} # 인자값이 들어오면 그 인자값과 같은 Job을 실행 시키겠다.
+      enabled: true
+    jdbc:
+      initialize-schema: always
+      #table-prefix: SYSTEM_ # 테이블 스키마 확인하는 prefix 값
+#  batch:
+#    jdbc:
+#      initialize-schema: always # 스키마 자동생성
+#    job:
+#      enabled: false # 자동 실행 방지 -> 우리가 설정해 놓은 jobRunner로 실행시키기 위해(false로 설정시)
+
