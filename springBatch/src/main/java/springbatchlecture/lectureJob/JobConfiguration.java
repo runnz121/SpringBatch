@@ -9,6 +9,7 @@ import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.job.builder.FlowBuilder;
 import org.springframework.batch.core.job.flow.Flow;
+import org.springframework.batch.core.job.flow.JobExecutionDecider;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
@@ -69,17 +70,47 @@ public class JobConfiguration {
 
 
 
-    // Flow 적용
+//    // Flow 적용
+//    @Bean
+//    public Job batchJob4() {
+//        return jobBuilderFactory.get("batchJob4")
+//            .incrementer(new RunIdIncrementer())
+//            .start(flowA())
+//            .next(step3())
+//            .next(flowB())
+//            .next(step6())
+//            .end()
+//            .build();
+//    }
+
+
+
+    // decider -> exit status 에 따른 step 분기
     @Bean
-    public Job batchJob4() {
-        return jobBuilderFactory.get("batchJob4")
+    public Job batchJob7() {
+        return jobBuilderFactory.get("batchJob7")
             .incrementer(new RunIdIncrementer())
-            .start(flowA())
-            .next(step3())
-            .next(flowB())
-            .next(step6())
+            .start(step1())
+            .next(decider())
+            .from(decider()).on("ODD").to(step2())
+            .from(decider()).on("EVEN").to(step3())
             .end()
             .build();
+    }
+
+    @Bean
+    public Job batchJob8() {
+        return jobBuilderFactory.get("batchJob8")
+            .start(step1())
+            .next(decider())
+            .from(decider()).on("ODD").to(step2())
+            .from(decider()).on("EVEN").to(step3())
+            .end()
+            .build();
+    }
+
+    public JobExecutionDecider decider() {
+        return new CustomDecider();
     }
 
     @Bean
