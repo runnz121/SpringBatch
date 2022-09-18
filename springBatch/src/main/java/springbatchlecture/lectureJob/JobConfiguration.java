@@ -70,19 +70,19 @@ public class JobConfiguration {
 
 
 
-//    // Flow 적용
-//    @Bean
-//    public Job batchJob4() {
-//        return jobBuilderFactory.get("batchJob4")
-//            .incrementer(new RunIdIncrementer())
-//            .start(flowA())
-//            .next(step3())
-//            .next(flowB())
-//            .next(step6())
-//            .end()
-//            .build();
-//    }
-
+   // Flow 적용 -> FlowJob을 생성
+   @Bean
+   public Job batchJob4() {
+       return jobBuilderFactory.get("batchJob4")
+           // simple Flow 객체를 생성하는 부분
+           .incrementer(new RunIdIncrementer())
+           .start(flowA())
+           .next(step3())
+           .next(flowB())
+           .next(step6())
+           .end()
+           .build();
+   }
 
 
     // decider -> exit status 에 따른 step 분기
