@@ -1,0 +1,3 @@
+rootProject.name = 'MiniProject1'
+include 'common-module'
+include 'project1'
